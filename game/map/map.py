@@ -7,7 +7,7 @@ class Map:
 
     def __init__(self, console_width, console_height) -> None:
         self.__actual_frame = []
-        self.__pos_next_objects = []
+        self.__pos_next_objects = {}
         self.__cur_pos = (0, 0)
         self.__entities = [
             "white_sheep"
@@ -22,12 +22,19 @@ class Map:
         self.console_height = console_height
 
     def next_frame(self):
-        self.__cur_pos += 1
-        if len(self.__pos_next_objects) == 0 or self.__pos_next_objects[len(self.__pos_next_objects) - 1].x - self.__cur_pos < self.max_pos:
-            self.__add_new_object()
-        if len(self.__pos_next_objects) > 0 and self.__pos_next_objects[0].x < self.__cur_pos:
-            self.__pos_next_objects.pop(0)
         self.__actual_frame = []
+        if len(self.__pos_next_objects) == 0:
+            self.__add_new_object()
+        else:
+            last_pos = self.__pos_next_objects.keys()[-1]
+            last_entity = self.__pos_next_objects[last_pos]
+            if last_pos[0] - self.__cur_pos < self.max_pos:
+                self.__add_new_object()
+            if last_pos[0] < self.__cur_pos:
+                self.__pos_next_objects.pop(0)
+        # for entity in self.__pos_next_objects.items():
+        #    entity.x
+        self.__cur_pos += 1
         return self.__actual_frame
 
     def create_map(self):
@@ -44,5 +51,4 @@ class Map:
             obj = Sheep(BLACK_SHEEP)
         else:
             obj = Entity()
-        obj.x = obj_pos
-        self.__pos_next_objects.append(obj)
+        self.__pos_next_objects[(obj_pos, obj.y)] = obj
