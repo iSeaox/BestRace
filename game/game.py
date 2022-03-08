@@ -1,65 +1,18 @@
 import time
 
 import display.console as console
+import display.entity.sheep as sheep
 from textures.player import player_animation as player
-
-sheep = """
-      ██████████
-    ██          ██
-    ██            ██
-      ████          ██
-    ██    ██          ████          ████████
-  ██                      ██████████        ████
-██    ██                                        ██
-██                                              ██
-  ██        ██                                    ██
-    ████████                                      ██
-        ██                                        ██
-        ██                                        ██
-          ██                                      ██
-          ██                                      ██
-            ██                                  ██
-              ██                                ██
-              ██                            ████
-                ██      ████████████      ██
-                  ██  ██            ██    ██
-                  ██  ██              ██  ██
-                ██    ██            ██    ██
-                ██████              ██████
-"""
-
-sheep_blanc = """
-      ██████████
-    ██████████████
-    ████████████████
-      ████████████████
-    ██    ████████████████          ████████
-  ██            ████████████████████████████████
-██    ██        ██████████████████████████████████
-██            ████████████████████████████████████
-  ██        ████████████████████████████████████████
-    ████████████████████████████████████████████████
-        ████████████████████████████████████████████
-        ████████████████████████████████████████████
-          ██████████████████████████████████████████
-          ██████████████████████████████████████████
-            ██████████████████████████████████████
-              ████████████████████████████████████
-              ██████████████████████████████████
-                ██      ██████████████    ██
-                  ██  ██            ██    ██
-                  ██  ██              ██  ██
-                ██    ██            ██    ██
-                ██████              ██████
-"""
 
 
 class Game:
 
     def __init__(self):
-        self.__console = console.Console(60, 100)
+        self.__console = console.Console(50, 110)
         self.__run = True
-        self.__frame_rate = 100
+        self.__frame_rate = 5
+        self.floor_height = self.__console.height - 1
+        self.__sheep = sheep.Sheep(sheep.BLACK_SHEEP)
 
     def game_loop(self):
         tick = 0
@@ -85,7 +38,10 @@ class Game:
 
     def render(self, tick):
         self.__console.clear_canvas()
-        self.__console.blit(sheep, 51, 1)
-        self.__console.blit(player[tick], 10, 0)
-        self.__console.blit(sheep_blanc, 60, 5)
-        self.__console.blit(sheep_blanc, 80, 0)
+
+        self.__sheep.render(self.__console, self)
+        self.draw_floor()
+
+    def draw_floor(self):
+        floor = "██" * self.__console.width
+        self.__console.blit(floor, 0, self.floor_height)
