@@ -34,11 +34,11 @@ class Game:
                 time.sleep(sleeping_time)
 
     def update(self):
-        pass
+        self.__sheep.do_tick()
 
     def render(self, tick):
         self.__console.clear_canvas()
-
+        self.__console.blit(player[tick], 0, 0)
         self.__sheep.render(self.__console, self)
         self.draw_floor()
 
