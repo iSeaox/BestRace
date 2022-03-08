@@ -10,13 +10,13 @@ class Sheep(entity.Entity):
         super().__init__()
         self.__color = sheep_color
         if(self.__color == BLACK_SHEEP):
-            self.__sprite_sheet = t_sheep.black_sheep
+            self.set_sprite_sheet(t_sheep.black_sheep_animation)
         else:
-            self.__sprite_sheet = t_sheep.white_sheep
+            self.set_sprite_sheet(t_sheep.white_sheep)
 
 
     def render(self, console, floor_height):
-        console.blit(self.get_sprite(self.tick), self.x, self.y)
+        console.blit(self.get_sprite(), self.x, self.y)
 
     def get_color(self):
         return self.__color
