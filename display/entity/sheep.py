@@ -12,11 +12,11 @@ class Sheep(entity.Entity):
         if(self.__color == BLACK_SHEEP):
             self.set_sprite_sheet(t_sheep.black_sheep_animation)
         else:
-            self.set_sprite_sheet(t_sheep.white_sheep)
+            self.set_sprite_sheet(t_sheep.white_sheep_animation)
 
 
-    def render(self, console, floor_height):
-        console.blit(self.get_sprite(), self.x, self.y)
+    def render(self, console, game):
+        console.blit(self.get_sprite(), self.x, game.floor_height - 24)
 
     def get_color(self):
         return self.__color
