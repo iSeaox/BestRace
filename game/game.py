@@ -1,8 +1,10 @@
 import time
 
+import keyboard
+
 import display.console as console
 import display.entity.sheep as sheep
-from textures.player import player_animation as player
+import display.entity.player as player
 
 
 class Game:
@@ -10,10 +12,14 @@ class Game:
     def __init__(self):
         self.__console = console.Console(60, 150)
         self.__run = True
-        self.__frame_rate = 10
+        self.__frame_rate = 5
         self.floor_height = self.__console.height - 1
+
         self.__sheep = sheep.Sheep(sheep.BLACK_SHEEP)
         self.__sheepBis = sheep.Sheep(sheep.WHITE_SHEEP)
+        self.__player = player.Player()
+
+        self.__player.x = 3
         self.__sheep.x = 150
         self.__sheepBis.x = 150 + 10
 
@@ -36,22 +42,27 @@ class Game:
             if(sleeping_time > 0):
                 time.sleep(sleeping_time)
 
-    def trigger_key_event(self, event):
-        print(event.name)
-
     def update(self):
         self.__sheep.x -= 1
         self.__sheepBis.x -= 1
 
+        self.__player.do_tick()
         self.__sheep.do_tick()
         self.__sheepBis.do_tick()
 
     def render(self, tick):
         self.__console.clear_canvas()
-        self.__console.blit(player[tick], 0, self.floor_height - 25)
+
+        self.__player.render(self.__console, self)
         self.__sheep.render(self.__console, self)
         self.__sheepBis.render(self.__console, self)
         self.draw_floor()
+
+    def trigger_key_event(self, event):
+        if(event.event_type == keyboard.KEY_DOWN):
+            if(event.name == "haut" or event.name == "space"):
+                if(not(self.__player.is_jumping)):
+                    self.__player.jump()
 
     def draw_floor(self):
         floor = "██" * self.__console.width
