@@ -8,11 +8,11 @@ from textures.player import player_animation as player
 class Game:
 
     def __init__(self):
-        self.__console = console.Console(50, 150)
+        self.__console = console.Console(60, 150)
         self.__run = True
         self.__frame_rate = 10
         self.floor_height = self.__console.height - 1
-        self.__sheep = sheep.Sheep(sheep.WHITE_SHEEP)
+        self.__sheep = sheep.Sheep(sheep.BLACK_SHEEP)
         self.__sheepBis = sheep.Sheep(sheep.WHITE_SHEEP)
         self.__sheep.x = 150
         self.__sheepBis.x = 150 + 10
@@ -35,6 +35,9 @@ class Game:
             print(sleeping_time)
             if(sleeping_time > 0):
                 time.sleep(sleeping_time)
+
+    def trigger_key_event(self, event):
+        print(event.name)
 
     def update(self):
         self.__sheep.x -= 1
