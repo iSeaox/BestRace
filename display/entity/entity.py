@@ -1,7 +1,7 @@
 class Entity:
     """L'object Entity est une classe abstraite
     de laquelle vont dériver tout les ojects spécifiques
-    à chaque entité comme le joueur, les oiseaux ou le mouton
+    à chaque entité comme le joueur, les oiseaux ou les moutons
     """
 
     def __init__(self):
