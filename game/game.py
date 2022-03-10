@@ -8,7 +8,7 @@ import display.entity.player as player
 
 
 class Game:
-
+    """Cette classe représente le jeu et toute la gestion de celui-ci""" 
     def __init__(self):
         self.__console = console.Console(60, 150)
         self.__run = True
@@ -24,6 +24,9 @@ class Game:
         self.__sheepBis.x = 150 + 10
 
     def game_loop(self):
+        """Cette méthode lance la boucle qui fait tourner le jeu à chaque 
+        itération une nouvelle image est affichée à raison 
+        de self.__frame_rate par seconde""" 
         tick = 0
         while(self.__run):
             begin = time.time_ns() / 1_000_000_000
