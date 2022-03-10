@@ -8,11 +8,11 @@ import display.entity.player as player
 
 
 class Game:
-    """Cette classe représente le jeu et toute la gestion de celui-ci""" 
+    """Cette classe représente le jeu et toute la gestion de celui-ci"""
     def __init__(self):
         self.__console = console.Console(60, 150)
         self.__run = True
-        self.__frame_rate = 5
+        self.__frame_rate = 30
         self.floor_height = self.__console.height - 1
 
         self.__sheep = sheep.Sheep(sheep.BLACK_SHEEP)
@@ -21,12 +21,12 @@ class Game:
 
         self.__player.x = 3
         self.__sheep.x = 150
-        self.__sheepBis.x = 150 + 10
+        self.__sheepBis.x = 160
 
     def game_loop(self):
-        """Cette méthode lance la boucle qui fait tourner le jeu à chaque 
-        itération une nouvelle image est affichée à raison 
-        de self.__frame_rate par seconde""" 
+        """Cette méthode lance la boucle qui fait tourner le jeu à chaque
+        itération une nouvelle image est affichée à raison
+        de self.__frame_rate par seconde"""
         tick = 0
         while(self.__run):
             begin = time.time_ns() / 1_000_000_000
@@ -41,13 +41,16 @@ class Game:
             tick %= 7
             elapsed = (time.time_ns() / 1_000_000_000 - begin)
             sleeping_time = (1 / self.__frame_rate) - elapsed
-            print(sleeping_time)
+            # print(sleeping_time)
             if(sleeping_time > 0):
                 time.sleep(sleeping_time)
 
     def update(self):
-        self.__sheep.x -= 1
-        self.__sheepBis.x -= 1
+        if(self.__sheep.x + 20 < 0):
+            self.__sheep.x = 150
+            self.__sheepBis.x = 160
+        self.__sheep.x -= 8
+        self.__sheepBis.x -= 8
 
         self.__player.do_tick()
         self.__sheep.do_tick()
