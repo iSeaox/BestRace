@@ -12,7 +12,7 @@ class Game:
     def __init__(self):
         self.__console = console.Console(60, 150)
         self.__run = True
-        self.__frame_rate = 30
+        self.__frame_rate = 20
         self.floor_height = self.__console.height - 1
 
         self.__sheep = sheep.Sheep(sheep.BLACK_SHEEP)
@@ -46,6 +46,9 @@ class Game:
                 time.sleep(sleeping_time)
 
     def update(self):
+        """Cette méthode est appelée dans la boucle principale du jeu et permet
+        de mettre à jour les objects. Elle s'appelle toujours avant de faire
+        le rendu de l'image"""
         if(self.__sheep.x + 20 < 0):
             self.__sheep.x = 150
             self.__sheepBis.x = 160
@@ -57,6 +60,7 @@ class Game:
         self.__sheepBis.do_tick()
 
     def render(self, tick):
+        """Cette méthode fait le rendu de la prochaine image qui va être affichée"""
         self.__console.clear_canvas()
 
         self.__player.render(self.__console, self)
@@ -65,11 +69,15 @@ class Game:
         self.draw_floor()
 
     def trigger_key_event(self, event):
+        """Est appelée par le gestionnaire de clavier lorsqu'une des touches écoutéés (voir keyboard_handler.py)
+        et éxecute en fonction de l'évenement passse en paramètre l'action appropirée"""
         if(event.event_type == keyboard.KEY_DOWN):
             if(event.name == "haut" or event.name == "space"):
                 if(not(self.__player.is_jumping)):
                     self.__player.jump()
 
     def draw_floor(self):
+        """Cette méthode s'éxécute dans le cadre du rendu de l'image, elle dessine le sol
+        sur le canvas de la console"""
         floor = "██" * self.__console.width
         self.__console.blit(floor, 0, self.floor_height)
