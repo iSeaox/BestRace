@@ -5,12 +5,14 @@ import keyboard
 import display.console as console
 import display.entity.sheep as sheep
 import display.entity.player as player
+import display.ui.score_renderer as score_renderer
+
 
 
 class Game:
     """Cette classe représente le jeu et toute la gestion de celui-ci"""
     def __init__(self):
-        self.__console = console.Console(60, 150)
+        self.__console = console.Console(60, 250)
         self.__run = True
         self.__frame_rate = 20
         self.floor_height = self.__console.height - 1
@@ -19,9 +21,11 @@ class Game:
         self.__sheepBis = sheep.Sheep(sheep.WHITE_SHEEP)
         self.__player = player.Player()
 
+        self.score = 0
+
         self.__player.x = 3
-        self.__sheep.x = 150
-        self.__sheepBis.x = 160
+        self.__sheep.x = 250
+        self.__sheepBis.x = 260
 
     def game_loop(self):
         """Cette méthode lance la boucle qui fait tourner le jeu à chaque
@@ -52,8 +56,8 @@ class Game:
         de mettre à jour les objects. Elle s'appelle toujours avant de faire
         le rendu de l'image"""
         if(self.__sheep.x + 20 < 0):
-            self.__sheep.x = 150
-            self.__sheepBis.x = 160
+            self.__sheep.x = 250
+            self.__sheepBis.x = 260
         self.__sheep.x -= 8
         self.__sheepBis.x -= 8
 
