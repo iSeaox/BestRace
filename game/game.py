@@ -35,6 +35,8 @@ class Game:
 
             rendered_console = self.__console.render()
             for line in rendered_console:
+                print('\033[1A', end="")
+            for line in rendered_console:
                 print(line, end="")
 
             tick += 1
