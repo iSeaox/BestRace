@@ -10,13 +10,14 @@ import display.entity.player as player
 import display.entity.bird as bird
 
 import display.ui.score_renderer as score_renderer
+import display.ui.string_renderer as string_renderer
 
 
 class Game:
     """Cette classe représente le jeu et toute la gestion de celui-ci"""
 
     def __init__(self):
-        self.__console = console.Console(60, 200)
+        self.__console = console.Console(100, 200)
         self.__run = True
         self.__frame_rate = 2
         self.floor_height = self.__console.height - 1
@@ -91,6 +92,7 @@ class Game:
             e.render(self.__console, self)
         self.draw_floor()
         self.draw_score()
+        self.__console.blit(string_renderer.render_string("SWAG"), 50, 1)
 
     def trigger_key_event(self, event):
         """Est appelée par le gestionnaire de clavier lorsqu'une des touches écoutéés (voir keyboard_handler.py)

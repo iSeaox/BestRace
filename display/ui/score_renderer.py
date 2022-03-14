@@ -1,6 +1,5 @@
 import textures.ui.score as t_score
 
-
 def render_score(score):
     score_width = 3
     score_height = 5

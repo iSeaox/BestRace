@@ -1,4 +1,3 @@
-import display.ui.score_renderer as score_renderer
 import game.keyboard_handler as key_handler
 import game.game as game
 import os
