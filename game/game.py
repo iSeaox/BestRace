@@ -20,10 +20,10 @@ class Game:
     def __init__(self):
         self.__console = console.Console(100, 200)
         self.__map = Map()
-        self.__map.max_pos = 100
-        self.__map.min_pos = 50
+        self.__map.max_pos = 10
+        self.__map.min_pos = 10
         self.__run = True
-        self.__frame_rate = 2
+        self.__frame_rate = 50
         self.floor_height = self.__console.height - 1
 
         self.__player = player.Player()
@@ -63,7 +63,7 @@ class Game:
 
         self.check_collision()
 
-        self.__map.next_frame()
+        self.__map.next_frame(self.__console)
         """
         if(self.__sheep.x + 20 < 0):
             self.__sheep.x = 250
@@ -94,7 +94,7 @@ class Game:
     def check_collision(self):
         """Cette méthode vérifie qu'il n'y a pas de collision entre le joueur et une
         entité. Le cas échéant, elle retourne le type de l'entité touchée"""
-        entities = self.__map.actual_frame.values()
+        entities = self.__map.actual_frame.values
         for e in entities:
             if(e != self.__player):
                 if(math.sqrt((e.x - self.__player.x) ** 2 + (e.y - self.__player.y) ** 2) < 40):
@@ -118,6 +118,6 @@ class Game:
         entities = self.__map.actual_frame
         self.__player.do_tick()
         self.__player.render(self.__console, self)
-        for entity in entities.values():
+        for entity in entities.values:
             entity.do_tick()
             entity.render(self.__console, self)

@@ -17,18 +17,16 @@ class ListOfList:
         self.values.remove(
             self.keys.pop(self.keys.index(key)))
 
+    def pop(self, index):
+        item = self.values.pop(index)
+        self.keys.pop(index)
+        return item
+
     def getkeys(self):
         return self.keys
 
     def getvalues(self):
         return self.values
 
-
-mylist = ListOfList()
-mylist.append("a", "ffz")
-mylist.append(1, 5)
-mylist.append("b", "fkfkf")
-mylist.append(2, 6)
-
-for i in mylist:
-    print(i)
+    def __len__(self):
+        return len(self.keys)
