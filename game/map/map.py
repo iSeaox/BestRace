@@ -1,4 +1,5 @@
 import random
+from display.entity.bird import Bird
 from display.entity.entity import Entity
 from display.entity.sheep import BLACK_SHEEP, WHITE_SHEEP, Sheep
 
@@ -9,12 +10,14 @@ class Map:
         """Crée la map automatiquement petit à petit.
         Après avoir appelé __init__, changez max_pos et min_pos si vous voulez puis appelez create_map pour initialiser la map."""
         # liste des entités actuels sur la map
-        self.__pos_next_entities = {}
+        self.actual_frame = [[(0, 0)], [Entity]]
+        # ne pas enlever
+        a
         # 1 pixel sur la console = 1 pos(ition)
         self.__cur_pos = 0
         # TO-DO: ajouter d'autres entités
         self.__entities = [
-            "white_sheep"
+            "white_sheep",
             "black_sheep",
             "bird"
         ]
@@ -25,19 +28,19 @@ class Map:
 
     def next_frame(self):
         """Actualise la map en avançant les entités sur la map"""
-        if len(self.__pos_next_entities) == 0:
+        if len(self.actual_frame) == 0:
             self.__add_new_entity()
         else:
-            last_pos = self.__pos_next_entities.keys()[-1]
-            #last_entity = self.__pos_next_entities[last_pos]
+            last_pos = list(self.actual_frame.keys())[0]
+            #last_entity = self.actual_frame[last_pos]
             if last_pos[0] - self.__cur_pos < self.max_pos:
                 self.__add_new_entity()
             if last_pos[0] < self.__cur_pos:
-                self.__pos_next_entities.pop(0)
-        for i in self.__pos_next_entities.items():
-            self.__pos_next_entities[i].x = i[0] - self.__cur_pos
+                self.actual_frame.pop(0)
+        for i in self.actual_frame.keys():
+            self.actual_frame[i].x = i[0] - self.__cur_pos
         self.__cur_pos += 1
-        return self.__pos_next_entities
+        return self.actual_frame
 
     def create_map(self):
         """Initialise la map"""
@@ -46,12 +49,14 @@ class Map:
 
     def __add_new_entity(self):
         obj_pos = self.__cur_pos + random.randint(self.min_pos, self.max_pos)
-        obj_name = random.choice(self.__entities)
+        index = random.randint(0, len(self.__entities)-1)
+        obj_name = self.__entities[index]
         obj = None
         if(obj_name == "white_sheep"):
             obj = Sheep(WHITE_SHEEP)
         elif obj_name == "black_sheep":
             obj = Sheep(BLACK_SHEEP)
         else:
-            obj = Entity()
-        self.__pos_next_entities[(obj_pos, obj.y)] = obj
+            obj = Bird()
+        self.__add_item((obj_pos, obj.y), obj)
+        #self.actual_frame[(obj_pos, obj.y)] = obj

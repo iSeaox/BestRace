@@ -11,6 +11,7 @@ import display.entity.bird as bird
 
 import display.ui.score_renderer as score_renderer
 import display.ui.string_renderer as string_renderer
+from game.map.map import Map
 
 
 class Game:
@@ -18,28 +19,18 @@ class Game:
 
     def __init__(self):
         self.__console = console.Console(100, 200)
+        self.__map = Map()
+        self.__map.max_pos = 100
+        self.__map.min_pos = 50
         self.__run = True
         self.__frame_rate = 2
         self.floor_height = self.__console.height - 1
 
-        self.__sheep = sheep.Sheep(sheep.BLACK_SHEEP)
-        self.__sheepBis = sheep.Sheep(sheep.WHITE_SHEEP)
         self.__player = player.Player()
-        self.__bird = bird.Bird()
-
-        self.entities = []
-        self.entities.append(self.__sheep)
-        self.entities.append(self.__sheepBis)
-        self.entities.append(self.__bird)
-        self.entities.append(self.__player)
 
         self.score = 0
 
         self.__player.x = 3
-        self.__sheep.x = 250
-        self.__sheepBis.x = 290
-        self.__bird.x = 200
-        self.__bird.y = 10
 
     def game_loop(self):
         """Cette méthode lance la boucle qui fait tourner le jeu à chaque
@@ -72,26 +63,24 @@ class Game:
 
         self.check_collision()
 
+        self.__map.next_frame()
+        """
         if(self.__sheep.x + 20 < 0):
             self.__sheep.x = 250
             self.__sheepBis.x = 290
         self.__sheep.x -= 8
         self.__sheepBis.x -= 8
         self.__bird.x -= 5
-
+        """
         self.score += 1
-
-        for e in self.entities:
-            e.do_tick()
 
     def render(self, tick):
         """Cette méthode fait le rendu de la prochaine image qui va être affichée"""
         self.__console.clear_canvas()
 
-        for e in self.entities:
-            e.render(self.__console, self)
         self.draw_floor()
         self.draw_score()
+        self.draw_map()
         self.__console.blit(string_renderer.render_string("SWAG"), 50, 1)
 
     def trigger_key_event(self, event):
@@ -105,7 +94,8 @@ class Game:
     def check_collision(self):
         """Cette méthode vérifie qu'il n'y a pas de collision entre le joueur et une
         entité. Le cas échéant, elle retourne le type de l'entité touchée"""
-        for e in self.entities:
+        entities = self.__map.actual_frame.values()
+        for e in entities:
             if(e != self.__player):
                 if(math.sqrt((e.x - self.__player.x) ** 2 + (e.y - self.__player.y) ** 2) < 40):
                     pass
@@ -123,3 +113,11 @@ class Game:
         score_to_display = score_renderer.render_score(self.score)
 
         self.__console.blit(score_to_display, 1, 1)
+
+    def draw_map(self):
+        entities = self.__map.actual_frame
+        self.__player.do_tick()
+        self.__player.render(self.__console, self)
+        for entity in entities.values():
+            entity.do_tick()
+            entity.render(self.__console, self)
