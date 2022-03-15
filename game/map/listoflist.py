@@ -12,7 +12,7 @@ class ListOfList:
         return self.__values[self.__keys.index(key)]
 
     def iter(self):
-        raise NotImplementedError("Please use mylist.getkeys()")
+        raise NotImplementedError("Please use mylist.get_keys()")
 
     def remove(self, key):
         self.__values.remove(
