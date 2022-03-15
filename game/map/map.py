@@ -42,10 +42,11 @@ class Map:
             if last_entity.x + last_entity.width < console.width:
                 self.__add_new_entity(console)
         for i in self.actual_frame.keys:
-            if i[0] + self.actual_frame[i].width < self.__cur_pos:
+            entity = self.actual_frame[i]
+            if entity.x + entity.width < 0:
                 self.actual_frame.pop(0)
             else:
-                self.actual_frame[i].x = i[0] - self.__cur_pos
+                entity.x = i[0] - self.__cur_pos
         self.__cur_pos += 1
         return self.actual_frame
 

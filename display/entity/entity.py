@@ -19,13 +19,17 @@ class Entity:
         self.tick %= len(self.__sprite_sheet)
 
     def render(self, console):
-        raise NotImplementedError("render() method has to be overrid on child class")
+        raise NotImplementedError(
+            "render() method has to be overrid on child class")
 
     def get_sprite(self):
         """Cette méthode retourne l'image (appelée "sprite") à partir de la feuille de textures lié à l'object"""
-        return self.__sprite_sheet[self.tick]
+        sprite = self.__sprite_sheet[self.tick]
+        self.width = max(len(i) for i in sprite.split("\n")) // 2
+        self.height = len(sprite.split("\n"))
+        return sprite
 
-    def set_sprite_sheet(self, sprite_sheet):
+    def set_sprite_sheet(self, sprite_sheet: list):
         self.__sprite_sheet = sprite_sheet
 
     def get_sprite_sheet(self):
