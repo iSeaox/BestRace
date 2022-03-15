@@ -12,14 +12,17 @@ import display.entity.bird as bird
 import display.ui.score_renderer as score_renderer
 import display.ui.string_renderer as string_renderer
 
+import textures.ui.menu as t_menu
+
 
 class Game:
     """Cette classe représente le jeu et toute la gestion de celui-ci"""
 
     def __init__(self):
         self.__console = console.Console(100, 200)
-        self.__run = True
-        self.__frame_rate = 2
+        self.__run = False
+        self.__in_menu = False
+        self.__frame_rate = 10
         self.floor_height = self.__console.height - 1
 
         self.__sheep = sheep.Sheep(sheep.BLACK_SHEEP)
@@ -40,6 +43,30 @@ class Game:
         self.__sheepBis.x = 290
         self.__bird.x = 200
         self.__bird.y = 10
+
+    def open_menu(self, last_score=None):
+        self.__in_menu = True
+
+        self.__console.blit(t_menu.left_up_corner, 0, 0)
+        self.__console.blit(t_menu.right_up_corner, self.__console.width - 11, 0)
+
+        self.__console.blit(t_menu.right_down_corner, self.__console.width - 11, self.__console.height - 12)
+        self.__console.blit(t_menu.left_down_corner, 0, self.__console.height - 12)
+
+        title = string_renderer.render_string("BESTRACE !")
+        self.__console.blit(title, self.__console.width // 2 - 20, 5)
+
+        self.__console.blit(string_renderer.render_string("PENSEZ A AJUSTER LA FENETRE AVEC LES COINS"), 5, self.__console.height - 10)
+
+        rendered_console = self.__console.render()
+        for line in rendered_console:
+            print('\033[1A', end="")
+        for line in rendered_console:
+            print(line, end="")
+
+        while(self.__in_menu):
+            pass
+        self.__run = True
 
     def game_loop(self):
         """Cette méthode lance la boucle qui fait tourner le jeu à chaque
@@ -92,15 +119,18 @@ class Game:
             e.render(self.__console, self)
         self.draw_floor()
         self.draw_score()
-        self.__console.blit(string_renderer.render_string("SWAG"), 50, 1)
+        self.__console.blit(string_renderer.render_string("L'NSI : LA MEILLEURE DES MATIERES"), 20, 2)
 
     def trigger_key_event(self, event):
         """Est appelée par le gestionnaire de clavier lorsqu'une des touches écoutéés (voir keyboard_handler.py)
         et éxecute en fonction de l'évenement passse en paramètre l'action appropirée"""
         if(event.event_type == keyboard.KEY_DOWN):
             if(event.name == "haut" or event.name == "space"):
-                if(not(self.__player.is_jumping)):
-                    self.__player.jump()
+                if(self.__in_menu):
+                    self.__in_menu = False
+                else:
+                    if(not(self.__player.is_jumping)):
+                        self.__player.jump()
 
     def check_collision(self):
         """Cette méthode vérifie qu'il n'y a pas de collision entre le joueur et une
@@ -122,4 +152,4 @@ class Game:
         (self.score) sur le canvas de la console"""
         score_to_display = score_renderer.render_score(self.score)
 
-        self.__console.blit(score_to_display, 1, 1)
+        self.__console.blit(score_to_display, 1, 2)

@@ -1,5 +1,9 @@
 import game.keyboard_handler as key_handler
+
 import game.game as game
+
+import utils.storage_handler as s_handler
+
 import os
 import sys
 import colorama
@@ -10,11 +14,11 @@ sys.path.insert(1, os.path.abspath("."))  # Permet d'avoir des imports
 # Le "os.path.abspath(".")" désigne le chemin courant vers la racine du projet
 
 
-# TEMPPPPP
-
 colorama.init()
 
 game_obj = game.Game()
 key_handler.enable(game_obj)
+
+game_obj.open_menu()
 
 game_obj.game_loop()
