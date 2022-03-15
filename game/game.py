@@ -14,6 +14,8 @@ import display.ui.string_renderer as string_renderer
 
 import textures.ui.menu as t_menu
 
+import utils.storage_handler as s_handler
+
 
 class Game:
     """Cette classe représente le jeu et toute la gestion de celui-ci"""
@@ -55,6 +57,18 @@ class Game:
 
         title = string_renderer.render_string("BESTRACE !")
         self.__console.blit(title, self.__console.width // 2 - 20, 5)
+
+        scores = s_handler.get_scores()
+        self.__console.blit(t_menu.score_border, 85, 20)
+        self.__console.blit(string_renderer.render_string("SCORE"), 88, 23)
+
+        score_to_display = 5
+        i = 1
+        while(i <= score_to_display):
+            if(i <= len(scores)):
+                self.__console.blit(string_renderer.render_string(str(i) + ": " + str(scores[i - 1])), 85, 33 + (i * 6))
+            i += 1
+
 
         self.__console.blit(string_renderer.render_string("PENSEZ A AJUSTER LA FENETRE AVEC LES COINS"), 5, self.__console.height - 10)
 
