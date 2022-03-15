@@ -94,7 +94,7 @@ class Game:
     def check_collision(self):
         """Cette méthode vérifie qu'il n'y a pas de collision entre le joueur et une
         entité. Le cas échéant, elle retourne le type de l'entité touchée"""
-        entities = self.__map.actual_frame.values
+        entities = self.__map.actual_frame.get_values()
         for e in entities:
             if(e != self.__player):
                 if(math.sqrt((e.x - self.__player.x) ** 2 + (e.y - self.__player.y) ** 2) < 40):
@@ -118,6 +118,6 @@ class Game:
         entities = self.__map.actual_frame
         self.__player.do_tick()
         self.__player.render(self.__console, self)
-        for entity in entities.values:
+        for entity in entities.get_values():
             entity.do_tick()
             entity.render(self.__console, self)

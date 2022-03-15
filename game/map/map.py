@@ -25,9 +25,11 @@ class Map:
         self.max_pos = 100
         # idem mais le mini
         self.min_pos = 10
+        # chance d'apparition pour chaque entités / le nombre total de "pourcentage"
         self.perc_bird = 10
         self.perc_white_sheep = 45
         self.perc_black_sheep = 45
+        #
         self.__percentage = [0 for i in range(self.perc_white_sheep)] \
             + [1 for i in range(self.perc_black_sheep)] \
             + [2 for i in range(self.perc_bird)]
@@ -37,11 +39,11 @@ class Map:
         if len(self.actual_frame) == 0:
             self.__add_new_entity(console)
         else:
-            last_pos = self.actual_frame.getkeys()[-1]
+            last_pos = self.actual_frame.get_keys()[-1]
             last_entity = self.actual_frame[last_pos]
             if last_entity.x + last_entity.width < console.width:
                 self.__add_new_entity(console)
-        for i in self.actual_frame.keys:
+        for i in self.actual_frame.get_keys():
             entity = self.actual_frame[i]
             if entity.x + entity.width < 0:
                 self.actual_frame.pop(0)
