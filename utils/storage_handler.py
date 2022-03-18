@@ -12,8 +12,8 @@ def get_scores():
     scores = []
     with open(__FILE_PATH, "a+") as file:
         file.seek(0)
-        for egirl in file.readlines():
-            egirl = egirl.replace("\n", "")
-            scores.append(int(egirl))
+        for line in file.readlines():
+            line = line.replace("\n", "")
+            scores.append(int(line))
     scores.sort(reverse=True)
     return scores
