@@ -27,7 +27,7 @@ class Game:
         self.__map.max_pos = 100
         self.__map.min_pos = 50
         self.__run = False
-        self.__frame_rate = 60
+        self.__frame_rate = 20
         self.__in_menu = False
         self.floor_height = self.__console.height - 1
 
@@ -105,14 +105,7 @@ class Game:
         self.check_collision()
 
         self.__map.next_frame(self.__console)
-        """
-        if(self.__sheep.x + 20 < 0):
-            self.__sheep.x = 250
-            self.__sheepBis.x = 290
-        self.__sheep.x -= 8
-        self.__sheepBis.x -= 8
-        self.__bird.x -= 5
-        """
+
         self.score += 1
 
     def render(self, tick):
@@ -143,7 +136,6 @@ class Game:
             if(e != self.__player):
                 if(math.sqrt((e.x - self.__player.x) ** 2 + (e.y - self.__player.y) ** 2) < 40):
                     pass
-                    # à finir
 
     def draw_floor(self):
         """Cette méthode s'éxécute dans le cadre du rendu de l'image, elle dessine le sol

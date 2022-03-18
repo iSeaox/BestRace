@@ -26,7 +26,7 @@ class Entity:
         """Cette méthode retourne l'image (appelée "sprite") à partir de la feuille de textures lié à l'object"""
         sprite = self.__sprite_sheet[self.tick]
         self.width = max(len(i) for i in sprite.split("\n")) // 2
-        self.height = len(sprite.split("\n"))
+        self.height = len(sprite.split("\n")) - 2
         return sprite
 
     def set_sprite_sheet(self, sprite_sheet: list):

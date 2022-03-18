@@ -49,7 +49,7 @@ class Map:
                 self.actual_frame.pop(0)
             else:
                 entity.x = i[0] - self.__cur_pos
-        self.__cur_pos += 1
+        self.__cur_pos += 5
         return self.actual_frame
 
     def create_map(self):
