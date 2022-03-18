@@ -7,7 +7,7 @@ class Bird(entity.Entity):
     def __init__(self):
         super().__init__()
         self.set_sprite_sheet(t_bird.bird_animation)
-        self.y = 20
+        self.y = 60
 
     def render(self, console, game):
         console.blit(self.get_sprite(), self.x, self.y)

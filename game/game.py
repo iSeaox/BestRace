@@ -20,8 +20,8 @@ class Game:
     def __init__(self):
         self.__console = console.Console(100, 200)
         self.__map = Map()
-        self.__map.max_pos = 200
-        self.__map.min_pos = 100
+        self.__map.max_pos = 100
+        self.__map.min_pos = 50
         self.__run = True
         self.__frame_rate = 60
         self.floor_height = self.__console.height - 1
