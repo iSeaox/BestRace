@@ -8,6 +8,7 @@ import display.console as console
 import display.entity.sheep as sheep
 import display.entity.player as player
 import display.entity.bird as bird
+import display.entity.background as background
 
 import display.ui.score_renderer as score_renderer
 import display.ui.string_renderer as string_renderer
@@ -27,11 +28,14 @@ class Game:
         self.__map.max_pos = 100
         self.__map.min_pos = 50
         self.__run = False
-        self.__frame_rate = 20
+        self.__frame_rate = 60
         self.__in_menu = False
         self.floor_height = self.__console.height - 1
 
         self.__player = player.Player(self.floor_height)
+        self.__background1 = background.Background()
+        self.__background2 = background.Background()
+        self.__background2.x = 288
 
         self.score = 0
 
@@ -104,6 +108,9 @@ class Game:
 
         self.check_collision()
 
+        self.__background1.do_tick()
+        self.__background2.do_tick()
+
         self.__map.next_frame(self.__console)
 
         self.score += 1
@@ -111,6 +118,9 @@ class Game:
     def render(self, tick):
         """Cette méthode fait le rendu de la prochaine image qui va être affichée"""
         self.__console.clear_canvas()
+
+        self.__background1.render(self.__console, self)
+        self.__background2.render(self.__console, self)
 
         self.draw_floor()
         self.draw_score()
