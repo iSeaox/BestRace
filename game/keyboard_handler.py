@@ -3,7 +3,7 @@ import keyboard
 def enable(game):
     """Cette fonction permet d'activer la récupération des évenements claviers
     sur les touches up, space, down, shift et right"""
-    
+
     keyboard.hook_key("up", game.trigger_key_event)
     keyboard.hook_key("space", game.trigger_key_event) # Les touches pour sauter
 
