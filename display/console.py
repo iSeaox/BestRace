@@ -1,10 +1,10 @@
 class Console:
     """Cette classe permet de gérer la console et l'affichage sur celle-ci"""
+
     def __init__(self, height, width):
         self.width = width
         self.height = height
         self.clear_canvas()
-
 
     def blit(self, textures, x, y):
         """Dessine sur le canvas de la console la textures donnée en paramètre
@@ -18,7 +18,7 @@ class Console:
             j = 0
             while(j < len(t_splited[i])):
                 if(t_splited[i][j:(j+2)] == "██"):
-                    if((y + i) < self.height and (x + (j // 2)) < self.width):
+                    if((y + i) < self.height and (y + i) >= 0 and (x + (j // 2)) < self.width and (x + (j // 2)) >= 0):
                         self.__canvas[y + i][x + (j // 2)] = 1
                 j += 2
 
