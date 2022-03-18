@@ -31,7 +31,7 @@ class Game:
         self.__in_menu = False
         self.floor_height = self.__console.height - 1
 
-        self.__player = player.Player()
+        self.__player = player.Player(self.floor_height)
 
         self.score = 0
 
