@@ -28,7 +28,7 @@ class Game:
         self.__map.max_pos = 100
         self.__map.min_pos = 50
         self.__run = False
-        self.__frame_rate = 60
+        self.__frame_rate = 20
         self.__in_menu = False
         self.floor_height = self.__console.height - 1
 
