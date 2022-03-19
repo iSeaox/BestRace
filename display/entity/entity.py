@@ -22,6 +22,19 @@ class Entity:
         raise NotImplementedError(
             "render() method has to be overrid on child class")
 
+    def get_pixel_positions(self):
+        """Retourne la liste des positions de tout les pixel blanc de l'entités sous la forme
+        d'une liste de tupe (y, x)"""
+        pixel_positions = []
+        t_splited = self.get_sprite().split("\n")
+        for line_index in range(len(t_splited)):
+            pixel_index = 0
+            while(pixel_index < len(t_splited[line_index])):
+                if(t_splited[line_index][pixel_index:(pixel_index + 2)] == "██"):
+                    pixel_positions.append((self.y + line_index, self.x + (pixel_index // 2)))
+                pixel_index += 2
+        return pixel_positions
+
     def get_sprite(self):
         """Cette méthode retourne l'image (appelée "sprite") à partir de la feuille de textures lié à l'object"""
         sprite = self.__sprite_sheet[self.tick]

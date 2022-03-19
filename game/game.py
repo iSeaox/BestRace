@@ -152,10 +152,20 @@ class Game:
         """Cette méthode vérifie qu'il n'y a pas de collision entre le joueur et une
         entité. Le cas échéant, elle retourne le type de l'entité touchée"""
         entities = self.__map.actual_frame.get_values()
+
+        player_pixel_positions = self.__player.get_pixel_positions()
+
         for e in entities:
             if(e != self.__player):
                 if(math.sqrt((e.x - self.__player.x) ** 2 + (e.y - self.__player.y) ** 2) < 40):
-                    pass
+                    e_pixel_positions = e.get_pixel_positions()
+                    for pp_pos in player_pixel_positions:
+                        if(pp_pos in e_pixel_positions):
+                            self.__run = False
+                    # print("\n ENTITY" + str(e_pixel_positions), len(e_pixel_positions))
+                    # print("\n PLAYER:" + str(player_pixel_positions), len(player_pixel_positions))
+
+
 
     def draw_floor(self):
         """Cette méthode s'éxécute dans le cadre du rendu de l'image, elle dessine le sol

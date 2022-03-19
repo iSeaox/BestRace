@@ -64,9 +64,9 @@ class Map:
         obj_name = self.__entities[index]
         obj = None
         if(obj_name == "white_sheep"):
-            obj = Sheep(WHITE_SHEEP)
+            obj = Sheep(WHITE_SHEEP, console.height - 1)
         elif obj_name == "black_sheep":
-            obj = Sheep(BLACK_SHEEP)
+            obj = Sheep(BLACK_SHEEP, console.height - 1)
         else:
             obj = Bird()
         self.actual_frame.append((obj_pos, obj.y), obj)
