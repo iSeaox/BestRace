@@ -112,7 +112,15 @@ class Game:
         de mettre à jour les objects. Elle s'appelle toujours avant de faire
         le rendu de l'image"""
 
-        self.check_collision()
+        stricken_entity = self.check_collision()
+        if(stricken_entity != None):
+            if(isinstance(stricken_entity, sheep.Sheep) and stricken_entity.get_color() == sheep.BLACK_SHEEP):
+                if(self.__player.is_mandaling):
+                    pass
+                else:
+                    pass
+            else:
+                self.__run = False
 
         self.__background1.do_tick()
         self.__background2.do_tick()
@@ -145,12 +153,15 @@ class Game:
                 if(self.__in_menu):
                     self.__in_menu = False
                 else:
-                    if(not(self.__player.is_jumping)):
+                    if(not(self.__player.is_jumping) and not(self.__player.is_mandaling)):
                         self.__player.jump()
+            elif(event.name == "droite"):
+                if(not(self.__in_menu) and not(self.__player.is_jumping) and not(self.__player.is_mandaling)):
+                    self.__player.do_mandale()
 
     def check_collision(self):
         """Cette méthode vérifie qu'il n'y a pas de collision entre le joueur et une
-        entité. Le cas échéant, elle retourne le type de l'entité touchée"""
+        entité. Le cas échéant, elle retourne l'entité touchée par le joueur"""
         entities = self.__map.actual_frame.get_values()
 
         player_pixel_positions = self.__player.get_pixel_positions()
@@ -161,11 +172,7 @@ class Game:
                     e_pixel_positions = e.get_pixel_positions()
                     for pp_pos in player_pixel_positions:
                         if(pp_pos in e_pixel_positions):
-                            self.__run = False
-                    # print("\n ENTITY" + str(e_pixel_positions), len(e_pixel_positions))
-                    # print("\n PLAYER:" + str(player_pixel_positions), len(player_pixel_positions))
-
-
+                            return e
 
     def draw_floor(self):
         """Cette méthode s'éxécute dans le cadre du rendu de l'image, elle dessine le sol

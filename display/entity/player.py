@@ -10,12 +10,18 @@ class Player(entity.Entity):
         self.floor_height = floor_height - 26
         self.y = self.floor_height
         self.is_jumping = False
+        self.is_mandaling = False
         self.jump_height = 25
         self.set_sprite_sheet(t_player.player_animation)
 
     def do_tick(self):
         """Cette méthode est systématiquement appelée avant le rendu elle
         permet de mettre à jour toutes les propriétés liées au joueur"""
+        if(self.is_mandaling):
+            if(self.tick == len(self.get_sprite_sheet()) - 1):
+                self.is_mandaling = False
+                self.set_sprite_sheet(t_player.player_animation)
+
         if(self.is_jumping):
             if(self.tick == len(self.get_sprite_sheet()) - 1):
                 self.is_jumping = False
@@ -27,6 +33,12 @@ class Player(entity.Entity):
                 self.y = self.floor_height - self.jump_height
         self.tick += 1
         self.tick %= len(self.get_sprite_sheet())
+
+    def do_mandale(self):
+        """Intialiase la mandale"""
+        self.is_mandaling = True
+        self.tick = 0
+        self.set_sprite_sheet(t_player.mandale_animation)
 
     def jump(self):
         """Intialiase le saut"""
