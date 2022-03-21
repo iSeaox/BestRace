@@ -91,6 +91,7 @@ class Game:
         while(self.__run):
             begin = time.time_ns() / 1_000_000_000
             self.update()
+            if(not(self.__run)): break # Ferme le jeu sans afficher l'image suivante dans le cas des collisions par exemple
             self.render(tick)
 
             rendered_console = self.__console.render()
