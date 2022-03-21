@@ -22,3 +22,4 @@ key_handler.enable(game_obj)
 game_obj.open_menu()
 
 game_obj.game_loop()
+s_handler.store_new_score(game_obj.score)
