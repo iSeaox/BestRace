@@ -45,6 +45,7 @@ class Player(entity.Entity):
         self.is_jumping = True
         self.tick = 0
         self.set_sprite_sheet(t_player.jump_animation)
+        self.is_mandaling = False
 
     def render(self, console, game):
         """Permet de faire le rendu du joueur dans l'object console"""
