@@ -25,6 +25,8 @@ class Map:
         self.max_pos = 100
         # idem mais le mini
         self.min_pos = 10
+        # évenement lorsque les moutons noirs sortent de la map
+        self.sheep_disappear = None
         # chance d'apparition pour chaque entités / le nombre total de "pourcentage"
         self.perc_bird = 10
         self.perc_white_sheep = 45
@@ -46,7 +48,9 @@ class Map:
         for i in self.actual_frame.get_keys():
             entity = self.actual_frame[i]
             if entity.x + entity.width < 0:
-                self.actual_frame.pop(0)
+                ent = self.actual_frame.pop(0)
+                if self.sheep_disappear != None:
+                    self.sheep_disappear(ent)
             else:
                 entity.x = i[0] - self.__cur_pos
         self.__cur_pos += 5
@@ -71,3 +75,7 @@ class Map:
             obj = Bird()
         self.actual_frame.append((obj_pos, obj.y), obj)
         #self.actual_frame[(obj_pos, obj.y)] = obj
+
+    def reset_map(self):
+        """Reset the map"""
+        self.actual_frame = ListOfList()
