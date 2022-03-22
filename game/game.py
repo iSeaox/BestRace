@@ -26,6 +26,7 @@ class Game:
     def __init__(self):
         self.__console = console.Console(100, 200)
         self.__map = Map()
+        self.__map.entity_disappear = self.trigger_sheep_event
         self.__map.max_pos = 100
         self.__map.min_pos = 50
         self.__run = False
@@ -54,10 +55,13 @@ class Game:
         self.__in_menu = True
 
         self.__console.blit(t_menu.left_up_corner, 0, 0)
-        self.__console.blit(t_menu.right_up_corner, self.__console.width - 11, 0)
+        self.__console.blit(t_menu.right_up_corner,
+                            self.__console.width - 11, 0)
 
-        self.__console.blit(t_menu.right_down_corner, self.__console.width - 11, self.__console.height - 12)
-        self.__console.blit(t_menu.left_down_corner, 0, self.__console.height - 12)
+        self.__console.blit(t_menu.right_down_corner,
+                            self.__console.width - 11, self.__console.height - 12)
+        self.__console.blit(t_menu.left_down_corner, 0,
+                            self.__console.height - 12)
 
         title = string_renderer.render_string("BESTRACE !")
         self.__console.blit(title, self.__console.width // 2 - 20, 5)
@@ -70,11 +74,12 @@ class Game:
         i = 1
         while(i <= score_to_display):
             if(i <= len(scores)):
-                self.__console.blit(string_renderer.render_string(str(i) + ": " + str(scores[i - 1])), 85, 33 + (i * 6))
+                self.__console.blit(string_renderer.render_string(
+                    str(i) + ": " + str(scores[i - 1])), 85, 33 + (i * 6))
             i += 1
 
-
-        self.__console.blit(string_renderer.render_string("PENSEZ A AJUSTER LA FENETRE AVEC LES COINS"), 5, self.__console.height - 10)
+        self.__console.blit(string_renderer.render_string(
+            "PENSEZ A AJUSTER LA FENETRE AVEC LES COINS"), 5, self.__console.height - 10)
 
         rendered_console = self.__console.render()
         for line in rendered_console:
@@ -94,7 +99,8 @@ class Game:
         while(self.__run):
             begin = time.time_ns() / 1_000_000_000
             self.update()
-            if(not(self.__run)): break # Ferme le jeu sans afficher l'image suivante dans le cas des collisions par exemple
+            if(not(self.__run)):
+                break  # Ferme le jeu sans afficher l'image suivante dans le cas des collisions par exemple
             self.render(tick)
 
             rendered_console = self.__console.render()
@@ -166,6 +172,10 @@ class Game:
                 if(not(self.__in_menu) and not(self.__player.is_jumping) and not(self.__player.is_mandaling)):
                     self.__player.do_mandale()
 
+    def trigger_sheep_event(self, entity):
+        if(type(entity) == sheep.Sheep and entity.get_color() == sheep.BLACK_SHEEP):
+            print(entity)
+
     def check_collision(self):
         """Cette méthode vérifie qu'il n'y a pas de collision entre le joueur et une
         entité. Le cas échéant, elle retourne l'entité touchée par le joueur"""
@@ -207,7 +217,5 @@ class Game:
         self.score = 0
         self.__frames = 0
         self.__console.clear_canvas()
-        self.__map = Map()
-        self.__map.max_pos = 100
-        self.__map.min_pos = 50
+        self.__map.reset_map()
         self.__run = False
