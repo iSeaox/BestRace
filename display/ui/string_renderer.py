@@ -1,6 +1,14 @@
 import textures.ui.text as t_text
 
 def render_string(text, space_size = 3):
+    """Cette fonction permet de renvoyer l'affichage du string text
+    exemple:
+      ████    ████      ████    ██████
+    ██    ██  ██  ██  ██    ██  ██    ██
+    ██    ██  ████    ██        ██    ██
+    ████████  ██  ██  ██    ██  ██    ██
+    ██    ██  ██████    ████    ██████
+    """
     char_height = 5
     space_btw_letter = 1
 

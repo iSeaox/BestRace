@@ -48,6 +48,8 @@ class Game:
         self.__player.x = 3
 
     def open_menu(self, last_score=None):
+        """ouvre le menu qui s'affiche avant le jeu et bloque le thread jusqu'à ce
+        que le joueur appuie sur espace"""
         self.__in_menu = True
 
         self.__console.blit(t_menu.left_up_corner, 0, 0)
@@ -192,6 +194,8 @@ class Game:
         self.__console.blit(score_to_display, 1, 2)
 
     def draw_map(self):
+        """Cette méthode s'éxécute dans le cadre du rendu de l'image, elle dessine toutes les entitées de la
+        map sur le canvas de la console"""
         entities = self.__map.actual_frame
         self.__player.do_tick()
         self.__player.render(self.__console, self)
