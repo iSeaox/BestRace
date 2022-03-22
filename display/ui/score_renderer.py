@@ -1,6 +1,14 @@
 import textures.ui.score as t_score
 
 def render_score(score):
+    """Cette fonction permet de renvoyer l'affichage du nombre score
+    exemple:
+      ████  ██████  ██████  ██  ██
+    ██  ██      ██      ██  ██  ██
+        ██  ██████  ██████  ██████
+        ██  ██          ██      ██
+        ██  ██████  ██████      ██
+    """
     score_width = 3
     score_height = 5
     space = 1

@@ -44,10 +44,13 @@ class Game:
         self.__moon2.x = 459
 
         self.score = 0
+        self.__frames = 0
 
         self.__player.x = 3
 
     def open_menu(self, last_score=None):
+        """ouvre le menu qui s'affiche avant le jeu et bloque le thread jusqu'à ce
+        que le joueur appuie sur espace"""
         self.__in_menu = True
 
         self.__console.blit(t_menu.left_up_corner, 0, 0)
@@ -119,13 +122,9 @@ class Game:
                 if(self.__player.is_mandaling):
                     pass
                 else:
-                    # self.__concole.clear_canvas()
-                    # self.open_menu()
-                    self.__run = False
+                    self.reset_game()
             else:
-                # self.__console.clear_canvas()
-                # self.open_menu()
-                self.__run = False
+                self.reset_game()
 
         self.__background1.do_tick()
         self.__background2.do_tick()
@@ -135,6 +134,9 @@ class Game:
         self.__map.next_frame(self.__console)
 
         self.score += 1
+
+        self.__frame_rate = self.__frames * 0.1 + 20
+        self.__frames += 1
 
     def render(self, tick):
         """Cette méthode fait le rendu de la prochaine image qui va être affichée"""
@@ -192,9 +194,20 @@ class Game:
         self.__console.blit(score_to_display, 1, 2)
 
     def draw_map(self):
+        """Cette méthode s'éxécute dans le cadre du rendu de l'image, elle dessine toutes les entitées de la
+        map sur le canvas de la console"""
         entities = self.__map.actual_frame
         self.__player.do_tick()
         self.__player.render(self.__console, self)
         for entity in entities.get_values():
             entity.do_tick()
             entity.render(self.__console, self)
+
+    def reset_game(self):
+        self.score = 0
+        self.__frames = 0
+        self.__console.clear_canvas()
+        self.__map = Map()
+        self.__map.max_pos = 100
+        self.__map.min_pos = 50
+        self.__run = False

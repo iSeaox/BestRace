@@ -19,8 +19,7 @@ class Entity:
         self.tick %= len(self.__sprite_sheet)
 
     def render(self, console):
-        raise NotImplementedError(
-            "render() method has to be overrid on child class")
+        raise NotImplementedError("render() method has to be overrid on child class")
 
     def get_pixel_positions(self):
         """Retourne la liste des positions de tout les pixel blanc de l'entités sous la forme
