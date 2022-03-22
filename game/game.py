@@ -119,8 +119,12 @@ class Game:
                 if(self.__player.is_mandaling):
                     pass
                 else:
-                    pass
+                    # self.__concole.clear_canvas()
+                    # self.open_menu()
+                    self.__run = False
             else:
+                # self.__console.clear_canvas()
+                # self.open_menu()
                 self.__run = False
 
         self.__background1.do_tick()
@@ -144,7 +148,7 @@ class Game:
         self.draw_floor()
         self.draw_score()
         self.draw_map()
-        self.__console.blit(string_renderer.render_string("L'NSI : LA MEILLEURE DES MATIERES"), 20, 2)
+        # self.__console.blit(string_renderer.render_string("L'NSI : LA MEILLEURE DES MATIERES"), 20, 2)
 
     def trigger_key_event(self, event):
         """Est appelée par le gestionnaire de clavier lorsqu'une des touches écoutéés (voir keyboard_handler.py)
@@ -154,7 +158,7 @@ class Game:
                 if(self.__in_menu):
                     self.__in_menu = False
                 else:
-                    if(not(self.__player.is_jumping) and not(self.__player.is_mandaling)):
+                    if(not(self.__player.is_jumping)):
                         self.__player.jump()
             elif(event.name == "droite"):
                 if(not(self.__in_menu) and not(self.__player.is_jumping) and not(self.__player.is_mandaling)):
