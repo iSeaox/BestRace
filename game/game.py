@@ -1,3 +1,4 @@
+import random as rdm
 import time
 import math
 
@@ -174,7 +175,23 @@ class Game:
 
     def trigger_sheep_event(self, entity):
         if(type(entity) == sheep.Sheep and entity.get_color() == sheep.BLACK_SHEEP):
-            print(entity)
+            self.set_penalities()
+
+    def set_penalities(self):
+        penalities = [
+            "speed_game",
+            "lost_pts"
+        ]
+        penality = rdm.choice(penalities)
+        if penality == "speed_game":
+            pass
+        elif penality == "lost_pts":
+            if(self.score < 200):
+                self.score = 0
+            else:
+                self.score -= 200
+        else:
+            print("ça marche pas")
 
     def check_collision(self):
         """Cette méthode vérifie qu'il n'y a pas de collision entre le joueur et une
