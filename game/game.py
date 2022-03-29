@@ -127,7 +127,7 @@ class Game:
         if(stricken_entity != None):
             if(isinstance(stricken_entity, sheep.Sheep) and stricken_entity.get_color() == sheep.BLACK_SHEEP):
                 if(self.__player.is_mandaling):
-                    pass
+                    self.__map.actual_frame.pop(0)
                 else:
                     self.reset_game()
             else:
