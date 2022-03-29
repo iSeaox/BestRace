@@ -231,6 +231,7 @@ class Game:
             entity.render(self.__console, self)
 
     def reset_game(self):
+        s_handler.store_new_score(self.score)
         self.score = 0
         self.__frames = 0
         self.__console.clear_canvas()
