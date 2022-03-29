@@ -142,7 +142,7 @@ class Game:
 
         self.score += 1
 
-        self.__frame_rate = self.__frames * 0.1 + 20
+        self.__frame_rate = self.__frames * 0.05 + 20
         self.__frames += 1
 
     def render(self, tick):
@@ -172,6 +172,9 @@ class Game:
             elif(event.name == "droite"):
                 if(not(self.__in_menu) and not(self.__player.is_jumping) and not(self.__player.is_mandaling)):
                     self.__player.do_mandale()
+            elif(event.name == "bas"):
+                if(not(self.__in_menu) and not(self.__player.is_jumping)):
+                    self.__player.do_crouch()
 
     def trigger_sheep_event(self, entity):
         if(type(entity) == sheep.Sheep and entity.get_color() == sheep.BLACK_SHEEP):
