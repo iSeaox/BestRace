@@ -11,6 +11,7 @@ class Player(entity.Entity):
         self.y = self.floor_height
         self.is_jumping = False
         self.is_mandaling = False
+        self.is_kroutchev = False
         self.jump_height = 25
         self.set_sprite_sheet(t_player.player_animation)
 
@@ -21,6 +22,12 @@ class Player(entity.Entity):
             if(self.tick == len(self.get_sprite_sheet()) - 1):
                 self.is_mandaling = False
                 self.set_sprite_sheet(t_player.player_animation)
+
+        if(self.is_kroutchev):
+            if(self.tick == len(self.get_sprite_sheet()) - 1):
+                self.is_kroutchev = False
+                self.set_sprite_sheet(t_player.player_animation)
+                self.y -= 6
 
         if(self.is_jumping):
             if(self.tick == len(self.get_sprite_sheet()) - 1):
@@ -46,6 +53,14 @@ class Player(entity.Entity):
         self.tick = 0
         self.set_sprite_sheet(t_player.jump_animation)
         self.is_mandaling = False
+
+    def do_crouch(self):
+        if not self.is_jumping and not self.is_kroutchev:
+            self.is_kroutchev = True
+            self.tick = 0
+            self.set_sprite_sheet(t_player.crouch_animation)
+            self.is_mandaling = False
+            self.y += 6
 
     def render(self, console, game):
         """Permet de faire le rendu du joueur dans l'object console"""
