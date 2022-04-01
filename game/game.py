@@ -1,4 +1,3 @@
-import random as rdm
 import time
 import math
 
@@ -15,6 +14,7 @@ import display.entity.moon as moon
 import display.ui.score_renderer as score_renderer
 import display.ui.string_renderer as string_renderer
 from game.map.map import Map
+from game.penality import PenalityHandler
 
 import textures.ui.menu as t_menu
 
@@ -50,8 +50,7 @@ class Game:
 
         self.__player.x = 3
 
-        self.curent_penality = {"frame_stop": 0,
-                                "penality_type": None, "value": 0}
+        self.curent_penality = PenalityHandler()
 
     def open_menu(self, last_score=None):
         """ouvre le menu qui s'affiche avant le jeu et bloque le thread jusqu'à ce
@@ -146,8 +145,8 @@ class Game:
         self.score += 1
 
         self.__map.speed = self.__frames // 200
-        if self.curent_penality["penality_type"] == "speed_game" and self.__frames < self.curent_penality["frame_stop"]:
-            self.__map.speed += self.curent_penality["value"]
+        if self.curent_penality.get_current_penality_type() == "speed_game" and self.__frames < self.curent_penality.get_current_penality_frame_stop():
+            self.__map.speed += self.curent_penality.get_current_penality_value()
         self.__frames += 1
 
     def render(self, tick):
@@ -183,24 +182,12 @@ class Game:
 
     def trigger_sheep_event(self, entity):
         if(type(entity) == sheep.Sheep and entity.get_color() == sheep.BLACK_SHEEP):
-            self.set_penalities()
-
-    def set_penalities(self):
-        penalities = [
-            "speed_game",
-            "lost_pts"
-        ]
-        penality = rdm.choice(penalities)
-        if penality == "speed_game":
-            self.curent_penality = {"frame_stop": self.__frames + 100,
-                                    "penality_type": penality, "value": 3}
-        elif penality == "lost_pts":
-            if(self.score < 200):
-                self.score = 0
-            else:
-                self.score -= 200
-        else:
-            print("ça marche pas")
+            self.curent_penality.set_penality(self.__frames + 100)
+            if self.curent_penality.get_current_penality_type() == "lost_pts":
+                if self.score < self.curent_penality.get_current_penality_value():
+                    self.score = 0
+                else:
+                    self.score -= self.curent_penality.get_current_penality_value()
 
     def check_collision(self):
         """Cette méthode vérifie qu'il n'y a pas de collision entre le joueur et une
@@ -241,8 +228,7 @@ class Game:
         s_handler.store_new_score(self.score)
         self.score = 0
         self.__frames = 0
-        self.curent_penality = {"frame_stop": 0,
-                                "penality_type": None, "value": 0}
+        self.curent_penality.reset_penality()
         self.__console.clear_canvas()
         self.__map.reset_map()
         self.__run = False
