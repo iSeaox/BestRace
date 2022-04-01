@@ -50,6 +50,9 @@ class Game:
 
         self.__player.x = 3
 
+        self.curent_penality = {"frame_stop": 0,
+                                "penality_type": None, "value": 0}
+
     def open_menu(self, last_score=None):
         """ouvre le menu qui s'affiche avant le jeu et bloque le thread jusqu'à ce
         que le joueur appuie sur espace"""
@@ -143,6 +146,8 @@ class Game:
         self.score += 1
 
         self.__map.speed = self.__frames // 200
+        if self.curent_penality["penality_type"] == "speed_game" and self.__frames < self.curent_penality["frame_stop"]:
+            self.__map.speed += self.curent_penality["value"]
         self.__frames += 1
 
     def render(self, tick):
@@ -187,7 +192,8 @@ class Game:
         ]
         penality = rdm.choice(penalities)
         if penality == "speed_game":
-            pass
+            self.curent_penality = {"frame_stop": self.__frames + 100,
+                                    "penality_type": penality, "value": 3}
         elif penality == "lost_pts":
             if(self.score < 200):
                 self.score = 0
@@ -235,6 +241,8 @@ class Game:
         s_handler.store_new_score(self.score)
         self.score = 0
         self.__frames = 0
+        self.curent_penality = {"frame_stop": 0,
+                                "penality_type": None, "value": 0}
         self.__console.clear_canvas()
         self.__map.reset_map()
         self.__run = False
