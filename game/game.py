@@ -13,8 +13,9 @@ import display.entity.moon as moon
 
 import display.ui.score_renderer as score_renderer
 import display.ui.string_renderer as string_renderer
+from game.challenges_handler import ChallengesHandler
 from game.map.map import Map
-from game.penality import PenalityHandler
+from game.penality_handler import PenalityHandler
 
 import textures.ui.menu as t_menu
 
@@ -51,6 +52,8 @@ class Game:
         self.__player.x = 3
 
         self.curent_penality = PenalityHandler()
+        self.challenges = ChallengesHandler()
+        self.create_challenges()
 
     def open_menu(self, last_score=None):
         """ouvre le menu qui s'affiche avant le jeu et bloque le thread jusqu'à ce
@@ -232,3 +235,13 @@ class Game:
         self.__console.clear_canvas()
         self.__map.reset_map()
         self.__run = False
+
+    def create_challenges(self):
+        self.challenges.create_challenge(
+            "Reach_pts", "Atteindre GOAL points", 500)
+        self.challenges.create_challenge(
+            "White_sheep", "Eviter GOAL moutons blanc", 100)
+        self.challenges.create_challenge(
+            "Black_sheep", "Percuter GOAL moutons noir", 200)
+        self.challenges.create_challenge(
+            "Avoid_pigeons", "Eviter GOAL pigeons", 45)
