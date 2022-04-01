@@ -31,7 +31,7 @@ class Game:
         self.__map.max_pos = 100
         self.__map.min_pos = 50
         self.__run = False
-        self.__frame_rate = 20
+        self.__frame_rate = 30
         self.__in_menu = False
         self.floor_height = self.__console.height - 1
 
@@ -142,7 +142,7 @@ class Game:
 
         self.score += 1
 
-        self.__frame_rate = self.__frames * 0.05 + 20
+        self.__map.speed = self.__frames // 200
         self.__frames += 1
 
     def render(self, tick):
@@ -200,9 +200,7 @@ class Game:
         """Cette méthode vérifie qu'il n'y a pas de collision entre le joueur et une
         entité. Le cas échéant, elle retourne l'entité touchée par le joueur"""
         entities = self.__map.actual_frame.get_values()
-
         player_pixel_positions = self.__player.get_pixel_positions()
-
         for e in entities:
             if(e != self.__player):
                 if(math.sqrt((e.x - self.__player.x) ** 2 + (e.y - self.__player.y) ** 2) < 40):

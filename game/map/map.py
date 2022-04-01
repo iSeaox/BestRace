@@ -25,6 +25,8 @@ class Map:
         self.max_pos = 100
         # idem mais le mini
         self.min_pos = 10
+        # modifier ceci pour faire avancer plus ou moins vite la map
+        self.speed = 0
         # évenement lorsque les moutons noirs sortent de la map
         self.entity_disappear = None
         # chance d'apparition pour chaque entités / le nombre total de "pourcentage"
@@ -53,7 +55,7 @@ class Map:
                     self.entity_disappear(ent)
             else:
                 entity.x = i[0] - self.__cur_pos
-        self.__cur_pos += 5
+        self.__cur_pos += 5 + self.speed
         return self.actual_frame
 
     def create_map(self):
