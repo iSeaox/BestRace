@@ -47,6 +47,7 @@ class Game:
         self.__moon2.x = 459
 
         self.score = 0
+        self.__last_score = None
         self.__frames = 0
 
         self.__player.x = 3
@@ -81,7 +82,7 @@ class Game:
         while(i <= score_to_display):
             if(i <= len(scores)):
                 self.__console.blit(string_renderer.render_string(
-                    str(i) + ": " + str(scores[i - 1])), 85, 33 + (i * 6))
+                    str(i) + ": " + str(scores[i - 1]) + (" VOUS" if scores[i - 1] == self.__last_score else "")), 85, 33 + (i * 6))
             i += 1
 
         self.__console.blit(string_renderer.render_string(
@@ -133,6 +134,7 @@ class Game:
             if(isinstance(stricken_entity, sheep.Sheep) and stricken_entity.get_color() == sheep.BLACK_SHEEP):
                 if(self.__player.is_mandaling):
                     self.__map.actual_frame.pop(0)
+                    self.challenges.add_challenge_counter("Black_sheep", False)
                 else:
                     self.reset_game()
             else:
@@ -167,8 +169,8 @@ class Game:
         # self.__console.blit(string_renderer.render_string("L'NSI : LA MEILLEURE DES MATIERES"), 20, 2)
 
     def trigger_key_event(self, event):
-        """Est appelée par le gestionnaire de clavier lorsqu'une des touches écoutéés (voir keyboard_handler.py)
-        et éxecute en fonction de l'évenement passse en paramètre l'action appropirée"""
+        """Est appelée par le gestionnaire de clavier lorsqu'une des touches écoutées (voir keyboard_handler.py)
+        et exécute en fonction de l'évenement passé en paramètre l'action appropriée"""
         if(event.event_type == keyboard.KEY_DOWN):
             if(event.name == "haut" or event.name == "space"):
                 if(self.__in_menu):
@@ -184,6 +186,7 @@ class Game:
                     self.__player.do_crouch()
 
     def trigger_sheep_event(self, entity):
+        """Est appelée par le gestionnaire de la carte lorsqu'une entitée sort de l'écran du jeu (voir map/map.py)"""
         if(type(entity) == sheep.Sheep and entity.get_color() == sheep.BLACK_SHEEP):
             self.curent_penality.set_penality(self.__frames + 100)
             if self.curent_penality.get_current_penality_type() == "lost_pts":
@@ -191,6 +194,10 @@ class Game:
                     self.score = 0
                 else:
                     self.score -= self.curent_penality.get_current_penality_value()
+        elif type(entity) == sheep.Sheep and entity.get_color() == sheep.WHITE_SHEEP:
+            self.challenges.add_challenge_counter("White_sheep", False)
+        else:
+            self.challenges.add_challenge_counter("Avoid_pigeons", False)
 
     def check_collision(self):
         """Cette méthode vérifie qu'il n'y a pas de collision entre le joueur et une
@@ -229,6 +236,13 @@ class Game:
 
     def reset_game(self):
         s_handler.store_new_score(self.score)
+        self.challenges.set_challenge_counter("Reach_pts", self.score, False)
+        self.challenges.set_challenge_counter(
+            "Reach_pts_total", self.challenges.get_challenge_state("Reach_pts_total") + self.score, False)
+        # MONTRER LES PENALITES SEULEMENT ICI. Après ce commentaire, les défis sont réinitialisés
+        self.reset_one_time_challenges()
+        self.challenges.write_file()
+        self.__last_score = self.score
         self.score = 0
         self.__frames = 0
         self.curent_penality.reset_penality()
@@ -236,12 +250,23 @@ class Game:
         self.__map.reset_map()
         self.__run = False
 
+    def reset_one_time_challenges(self):
+        self.challenges.reset_challenge("Reach_pts", False)
+        self.challenges.reset_challenge("Avoid_penalities", False)
+        self.challenges.reset_challenge("I_love_penalities", False)
+
     def create_challenges(self):
         self.challenges.create_challenge(
-            "Reach_pts", "Atteindre GOAL points", 500)
+            "Reach_pts", "Atteindre GOAL points en une partie", 750)
         self.challenges.create_challenge(
-            "White_sheep", "Eviter GOAL moutons blanc", 100)
+            "Reach_pts_total", "Atteindre GOAL points au total", 4000)
         self.challenges.create_challenge(
-            "Black_sheep", "Percuter GOAL moutons noir", 200)
+            "White_sheep", "Eviter GOAL moutons blanc au total", 150)
         self.challenges.create_challenge(
-            "Avoid_pigeons", "Eviter GOAL pigeons", 45)
+            "Black_sheep", "Percuter GOAL moutons noir au total", 300)
+        self.challenges.create_challenge(
+            "Avoid_pigeons", "Eviter GOAL pigeons au total", 75)
+        self.challenges.create_challenge(
+            "Avoid_penalities", "GOAL penalites en une partie", 0)
+        self.challenges.create_challenge(
+            "I_love_penalities", "Prendre GOAL penalites en une partie", 10)

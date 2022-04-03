@@ -8,6 +8,38 @@ import os
 import sys
 import colorama
 
+import ctypes
+
+LF_FACESIZE = 32
+STD_OUTPUT_HANDLE = -11
+
+
+class COORD(ctypes.Structure):
+    _fields_ = [("X", ctypes.c_short), ("Y", ctypes.c_short)]
+
+
+class CONSOLE_FONT_INFOEX(ctypes.Structure):
+    _fields_ = [("cbSize", ctypes.c_ulong),
+                ("nFont", ctypes.c_ulong),
+                ("dwFontSize", COORD),
+                ("FontFamily", ctypes.c_uint),
+                ("FontWeight", ctypes.c_uint),
+                ("FaceName", ctypes.c_wchar * LF_FACESIZE)]
+
+
+font = CONSOLE_FONT_INFOEX()
+font.cbSize = ctypes.sizeof(CONSOLE_FONT_INFOEX)
+#font.nFont = 9
+#font.dwFontSize.X = 5
+font.dwFontSize.Y = 5
+#font.FontFamily = 9
+#font.FontWeight = 9
+font.FaceName = "Lucida Console"
+
+handle = ctypes.windll.kernel32.GetStdHandle(STD_OUTPUT_HANDLE)
+ctypes.windll.kernel32.SetCurrentConsoleFontEx(
+    handle, ctypes.c_long(False), ctypes.pointer(font))
+
 sys.path.insert(1, os.path.abspath("."))  # Permet d'avoir des imports
 # plus clair lorsqu'il y a plusieurs packages ce qui est le cas ici
 #
@@ -15,6 +47,9 @@ sys.path.insert(1, os.path.abspath("."))  # Permet d'avoir des imports
 
 
 colorama.init()
+
+cmd = 'mode 400,101'
+os.system(cmd)
 
 game_obj = game.Game()
 key_handler.enable(game_obj)
