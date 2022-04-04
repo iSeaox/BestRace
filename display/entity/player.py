@@ -43,6 +43,9 @@ class Player(entity.Entity):
 
     def do_mandale(self):
         """Intialiase la mandale"""
+        if(self.is_kroutchev):
+            self.is_kroutchev = False
+            self.y -= 6
         self.is_mandaling = True
         self.tick = 0
         self.set_sprite_sheet(t_player.mandale_animation)
