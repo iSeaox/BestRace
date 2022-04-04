@@ -1,6 +1,6 @@
 class ListOfList:
     def __init__(self) -> None:
-        """Create a dict-like of python but it respect the order of the last added element"""
+        """Create a dict-like of python but it respects the order of the last added element"""
         self.__keys = []
         self.__values = []
 
@@ -11,7 +11,7 @@ class ListOfList:
     def __getitem__(self, key):
         return self.__values[self.__keys.index(key)]
 
-    def iter(self):
+    def __iter__(self):
         raise NotImplementedError("Please use mylist.get_keys()")
 
     def remove(self, key):
