@@ -5,8 +5,10 @@ import textures.ui.background as t_background
 
 class Background(entity.Entity):
     """Cette classe permet de gérer le fond d'écran"""
+
     def __init__(self):
         super().__init__()
+        self.y = 30
         self.set_sprite_sheet(t_background.background)
 
     def render(self, console, game):

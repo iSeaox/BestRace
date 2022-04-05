@@ -5,10 +5,11 @@ import textures.bird as t_bird
 
 class Bird(entity.Entity):
     """Cette classe permet de gérer les oiseaux"""
+
     def __init__(self):
         super().__init__()
         self.set_sprite_sheet(t_bird.bird_animation)
-        self.y = 63
+        self.y = 88
 
     def render(self, console, game):
         """Permet de faire le rendu de l'oiseau et de l'inclure dans l'object console

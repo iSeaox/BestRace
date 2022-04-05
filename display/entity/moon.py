@@ -7,7 +7,7 @@ class Moon(entity.Entity):
     def __init__(self):
         super().__init__()
         self.set_sprite_sheet(t_background.moon)
-        self.y = 12
+        self.y = 22
 
     def render(self, console, game):
         """Permet de faire le rendu de la lune et de l'inclure dans l'object console

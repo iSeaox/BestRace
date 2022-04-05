@@ -46,7 +46,7 @@ sys.path.insert(1, os.path.abspath("."))  # Permet d'avoir des imports
 colorama.init()
 
 # Modifier la taille de la fenêtre
-cmd = 'mode 400,101'
+cmd = 'mode 400,126'
 os.system(cmd)
 #
 

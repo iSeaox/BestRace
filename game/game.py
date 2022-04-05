@@ -26,7 +26,7 @@ class Game:
     """Cette classe représente le jeu et toute la gestion de celui-ci"""
 
     def __init__(self):
-        self.__console = console.Console(100, 200)
+        self.__console = console.Console(125, 200)
         self.__map = Map()
         self.__map.entity_disappear = self.trigger_sheep_event
         self.__map.max_pos = 100
@@ -95,7 +95,7 @@ class Game:
             print(line, end="")
 
         while(self.__in_menu):
-            pass
+            time.sleep(0.001 / self.__frame_rate)
         self.__run = True
 
     def game_loop(self):
