@@ -65,7 +65,7 @@ class Game:
         """ouvre le menu qui s'affiche avant le jeu et bloque le thread jusqu'à ce
         que le joueur appuie sur espace"""
         self.__in_menu = True
-
+        self.already_rendered_console = None
         while(self.__in_menu):
             self.__console.clear_canvas()
 
@@ -84,7 +84,8 @@ class Game:
             if(not(self.__in_menu_stat)):
                 scores = s_handler.get_scores()
                 self.__console.blit(t_menu.score_border, 85, 20)
-                self.__console.blit(string_renderer.render_string("SCORE"), 88, 23)
+                self.__console.blit(
+                    string_renderer.render_string("SCORE"), 88, 23)
 
                 score_to_display = 5
                 i = 1
@@ -94,7 +95,8 @@ class Game:
                             str(i) + ": " + str(scores[i - 1]) + (" VOUS" if scores[i - 1] == self.__last_score else "")), 85, 33 + (i * 6))
                     i += 1
 
-                self.__console.blit(string_renderer.render_string("APPUYEZ SUR ENTRER POUR ACCEDER AU MENU"), 8, self.__console.height - 10)
+                self.__console.blit(string_renderer.render_string(
+                    "APPUYEZ SUR ENTRER POUR ACCEDER AU MENU"), 8, self.__console.height - 10)
             else:
                 subtitle_chal = string_renderer.render_string("CHALLENGES:")
                 self.__console.blit(subtitle_chal, 7, 12)
@@ -102,9 +104,11 @@ class Game:
                 cursor_y = 0
                 for chal_key in self.challenges.get_all_challenges_id():
                     if(not(self.challenges.have_completed_challenge(chal_key))):
-                        chal_name = self.challenges.get_challenge_name(chal_key)
+                        chal_name = self.challenges.get_challenge_name(
+                            chal_key)
 
-                        str_chal = string_renderer.render_string("* " + chal_name.upper())
+                        str_chal = string_renderer.render_string(
+                            "* " + chal_name.upper())
                         self.__console.blit(str_chal, 12, 20 + cursor_y)
 
                         cursor_y += 7
@@ -112,7 +116,8 @@ class Game:
                 subtitle_skin = string_renderer.render_string("SKINS:")
                 self.__console.blit(subtitle_skin, 7, 70)
                 self.__console.blit(t_key.left_arrow, 70, 105)
-                self.__console.blit(t_key.right_arrow, self.__console.width - 70, 105)
+                self.__console.blit(t_key.right_arrow,
+                                    self.__console.width - 70, 105)
 
                 skins = self.__player.get_skins()
                 if(self.__selected_skin_id < 0):
@@ -122,12 +127,13 @@ class Game:
                 current_skin = skins[self.__selected_skin_id]
                 self.__console.blit(current_skin, 94, 80)
 
-
             rendered_console = self.__console.render()
-            for line in rendered_console:
-                print('\033[1A', end="")
-            for line in rendered_console:
-                print(line, end="")
+            if self.already_rendered_console != rendered_console:
+                for line in rendered_console:
+                    print('\033[1A', end="")
+                for line in rendered_console:
+                    print(line, end="")
+                self.already_rendered_console = rendered_console
 
             time.sleep(0.0001 / self.__frame_rate)
         self.__run = True
