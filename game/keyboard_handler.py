@@ -11,3 +11,5 @@ def enable(game):
     keyboard.hook_key("shift", game.trigger_key_event) # Les touches pour se baisser
 
     keyboard.hook_key("right", game.trigger_key_event) # La touche pour taper
+    keyboard.hook_key("left", game.trigger_key_event) # La touche pour selectionner menu
+    keyboard.hook_key("enter", game.trigger_key_event) # la touche pour acceder au menu

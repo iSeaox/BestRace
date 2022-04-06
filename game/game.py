@@ -18,6 +18,7 @@ from game.map.map import Map
 from game.penality_handler import PenalityHandler
 
 import textures.ui.menu as t_menu
+import textures.ui.key as t_key
 
 import utils.storage_handler as s_handler
 
@@ -33,7 +34,11 @@ class Game:
         self.__map.min_pos = 50
         self.__run = False
         self.__frame_rate = 30
+
         self.__in_menu = False
+        self.__in_menu_stat = False
+        self.__selected_skin_id = 0
+
         self.floor_height = self.__console.height - 1
 
         self.__player = player.Player(self.floor_height)
@@ -61,42 +66,73 @@ class Game:
         que le joueur appuie sur espace"""
         self.__in_menu = True
 
-        self.__console.blit(t_menu.left_up_corner, 0, 0)
-        self.__console.blit(t_menu.right_up_corner,
-                            self.__console.width - 11, 0)
-
-        self.__console.blit(t_menu.right_down_corner,
-                            self.__console.width - 11, self.__console.height - 12)
-        self.__console.blit(t_menu.left_down_corner, 0,
-                            self.__console.height - 12)
-
-        title = string_renderer.render_string("BESTRACE !")
-        self.__console.blit(title, self.__console.width // 2 - 20, 5)
-
-        scores = s_handler.get_scores()
-        self.__console.blit(t_menu.score_border, 85, 20)
-        self.__console.blit(string_renderer.render_string("SCORE"), 88, 23)
-
-        score_to_display = 5
-        i = 1
-        while(i <= score_to_display):
-            if(i <= len(scores)):
-                self.__console.blit(string_renderer.render_string(
-                    str(i) + ": " + str(scores[i - 1]) + (" VOUS" if scores[i - 1] == self.__last_score else "")), 85, 33 + (i * 6))
-            i += 1
-
-        self.__console.blit(string_renderer.render_string(
-            "PENSEZ A AJUSTER LA FENETRE AVEC LES COINS"), 5, self.__console.height - 10)
-
-        rendered_console = self.__console.render()
-        for line in rendered_console:
-            print('\033[1A', end="")
-        for line in rendered_console:
-            print(line, end="")
-
         while(self.__in_menu):
-            time.sleep(0.001 / self.__frame_rate)
+            self.__console.clear_canvas()
+
+            self.__console.blit(t_menu.left_up_corner, 0, 0)
+            self.__console.blit(t_menu.right_up_corner,
+                                self.__console.width - 11, 0)
+
+            self.__console.blit(t_menu.right_down_corner,
+                                self.__console.width - 11, self.__console.height - 12)
+            self.__console.blit(t_menu.left_down_corner, 0,
+                                self.__console.height - 12)
+
+            title = string_renderer.render_string("BESTRACE !")
+            self.__console.blit(title, self.__console.width // 2 - 20, 5)
+
+            if(not(self.__in_menu_stat)):
+                scores = s_handler.get_scores()
+                self.__console.blit(t_menu.score_border, 85, 20)
+                self.__console.blit(string_renderer.render_string("SCORE"), 88, 23)
+
+                score_to_display = 5
+                i = 1
+                while(i <= score_to_display):
+                    if(i <= len(scores)):
+                        self.__console.blit(string_renderer.render_string(
+                            str(i) + ": " + str(scores[i - 1]) + (" VOUS" if scores[i - 1] == self.__last_score else "")), 85, 33 + (i * 6))
+                    i += 1
+
+                self.__console.blit(string_renderer.render_string("APPUYEZ SUR ENTRER POUR ACCEDER AU MENU"), 8, self.__console.height - 10)
+            else:
+                subtitle_chal = string_renderer.render_string("CHALLENGES:")
+                self.__console.blit(subtitle_chal, 7, 12)
+
+                cursor_y = 0
+                for chal_key in self.challenges.get_all_challenges_id():
+                    if(not(self.challenges.have_completed_challenge(chal_key))):
+                        chal_name = self.challenges.get_challenge_name(chal_key)
+
+                        str_chal = string_renderer.render_string("* " + chal_name.upper())
+                        self.__console.blit(str_chal, 12, 20 + cursor_y)
+
+                        cursor_y += 7
+
+                subtitle_skin = string_renderer.render_string("SKINS:")
+                self.__console.blit(subtitle_skin, 7, 70)
+                self.__console.blit(t_key.left_arrow, 70, 105)
+                self.__console.blit(t_key.right_arrow, self.__console.width - 70, 105)
+
+                skins = self.__player.get_skins()
+                if(self.__selected_skin_id < 0):
+                    self.__selected_skin_id = len(skins) - 1
+                self.__selected_skin_id %= len(skins)
+
+                current_skin = skins[self.__selected_skin_id]
+                self.__console.blit(current_skin, 94, 80)
+
+
+            rendered_console = self.__console.render()
+            for line in rendered_console:
+                print('\033[1A', end="")
+            for line in rendered_console:
+                print(line, end="")
+
+            time.sleep(0.0001 / self.__frame_rate)
         self.__run = True
+        self.__in_menu_stat = False
+        self.__player.set_selected_skin(self.__selected_skin_id)
 
     def game_loop(self):
         """Cette méthode lance la boucle qui fait tourner le jeu à chaque
@@ -181,9 +217,19 @@ class Game:
             elif(event.name == "droite"):
                 if(not(self.__in_menu) and not(self.__player.is_jumping) and not(self.__player.is_mandaling)):
                     self.__player.do_mandale()
+                elif(self.__in_menu and self.__in_menu_stat):
+                    self.__selected_skin_id += 1
+
+            elif(event.name == "gauche"):
+                if(self.__in_menu and self.__in_menu_stat):
+                    self.__selected_skin_id -= 1
+
             elif(event.name == "bas"):
                 if(not(self.__in_menu) and not(self.__player.is_jumping)):
                     self.__player.do_crouch()
+            elif(event.name == "enter"):
+                if(self.__in_menu):
+                    self.__in_menu_stat = True
 
     def trigger_sheep_event(self, entity):
         """Est appelée par le gestionnaire de la carte lorsqu'une entitée sort de l'écran du jeu (voir map/map.py)"""
@@ -261,9 +307,9 @@ class Game:
         self.challenges.create_challenge(
             "Reach_pts_total", "Atteindre GOAL points au total", 4000)
         self.challenges.create_challenge(
-            "White_sheep", "Eviter GOAL moutons blanc au total", 150)
+            "White_sheep", "Eviter GOAL moutons blancs au total", 150)
         self.challenges.create_challenge(
-            "Black_sheep", "Percuter GOAL moutons noir au total", 300)
+            "Black_sheep", "Percuter GOAL moutons noirs au total", 300)
         self.challenges.create_challenge(
             "Avoid_pigeons", "Eviter GOAL pigeons au total", 75)
         self.challenges.create_challenge(
