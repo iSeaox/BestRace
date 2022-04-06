@@ -29,7 +29,8 @@ class ChallengesHandler:
         """Créer un défi en lui donnant un id, un nom et un but à atteindre.
         Utiliser "GOAL" dans le nom permet d'avoir le objectif dans le nom du défi en utilisant get_challenge_name"""
         self.__challenges_info[challenge_id] = {"name": name, "goal": goal}
-        self.__challenges_user[challenge_id] = 0
+        if challenge_id not in self.__challenges_user:
+            self.__challenges_user[challenge_id] = 0
 
     def reset_challenge(self, challenge_id, autowrite=True):
         """Réinitialiser un des défis selon son identifiant"""
