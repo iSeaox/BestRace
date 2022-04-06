@@ -71,8 +71,16 @@ class Player(entity.Entity):
         console.blit(self.get_sprite(), self.x, self.y)
 
     def get_skins(self):
-        return [t_player.player_skins[0]["player_animation"][0], t_player.player_skins[1]["player_animation"][0]]
+        return [t_player.player_skins[0]["player_animation"][0], t_player.player_skins[1]["player_animation"][0], t_player.player_skins[2]["player_animation"][0]]
 
     def set_selected_skin(self, selected):
+        if selected != self.selected_skin:
+            if self.selected_skin == 2:
+                self.floor_height += 3
+                self.y = self.floor_height
+            else:
+                self.floor_height -= 3
+                self.y = self.floor_height
+
         self.selected_skin = selected
         self.set_sprite_sheet(t_player.player_skins[self.selected_skin]["player_animation"])
