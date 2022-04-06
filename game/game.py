@@ -302,6 +302,7 @@ class Game:
         self.__console.clear_canvas()
         self.__map.reset_map()
         self.__run = False
+        self.__player.floor_height = self.floor_height
 
     def reset_one_time_challenges(self):
         self.challenges.reset_challenge("Reach_pts", False)

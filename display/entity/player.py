@@ -7,8 +7,8 @@ class Player(entity.Entity):
     def __init__(self, floor_height):
         super().__init__() # permet d'appeller le constructeur de la superclass
         # ici entity.Entity
-        self.floor_height = floor_height - 26
-        self.y = self.floor_height
+        self.floor_height = floor_height
+        self.y = self.floor_height - 26
         self.is_jumping = False
         self.is_mandaling = False
         self.is_kroutchev = False
@@ -74,13 +74,17 @@ class Player(entity.Entity):
         return [t_player.player_skins[0]["player_animation"][0], t_player.player_skins[1]["player_animation"][0], t_player.player_skins[2]["player_animation"][0]]
 
     def set_selected_skin(self, selected):
-        if selected != self.selected_skin:
-            if self.selected_skin == 2:
-                self.floor_height += 3
-                self.y = self.floor_height
-            else:
-                self.floor_height -= 3
-                self.y = self.floor_height
+
+        # if selected != self.selected_skin:
+        #     if self.selected_skin == 2:
+        #         self.floor_height += 3
+        #         self.y = self.floor_height
+        #     else:
+        #         self.floor_height -= 3
+        #         self.y = self.floor_height
 
         self.selected_skin = selected
         self.set_sprite_sheet(t_player.player_skins[self.selected_skin]["player_animation"])
+        temp_height = len(self.get_sprite_sheet()[0].split("\n")) - 1
+        self.y = self.floor_height - temp_height
+        self.floor_height -= temp_height
