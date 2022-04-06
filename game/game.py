@@ -292,6 +292,7 @@ class Game:
         self.score = 0
         self.__frames = 0
         self.curent_penality.reset_penality()
+        self.__player.tick = 0
         self.__console.clear_canvas()
         self.__map.reset_map()
         self.__run = False
