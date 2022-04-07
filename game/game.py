@@ -30,8 +30,6 @@ class Game:
         self.__console = console.Console(125, 200)
         self.__map = Map()
         self.__map.entity_disappear = self.trigger_sheep_event
-        self.__map.max_pos = 100
-        self.__map.min_pos = 50
         self.__run = False
         self.__frame_rate = 30
 
@@ -192,6 +190,8 @@ class Game:
         self.score += 1
 
         self.__map.speed = self.__frames // 200
+        self.__map.min_pos = 50 + self.__frame_rate
+        self.__map.max_pos = self.__map.min_pos + 50
         if self.curent_penality.get_current_penality_type() == "speed_game" and self.__frames < self.curent_penality.get_current_penality_frame_stop():
             self.__map.speed += self.curent_penality.get_current_penality_value()
         self.__frames += 1
